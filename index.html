@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔓 Password Cracking Guide - Cybersecurity Toolkit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151935;
+            --bg-card: #1a1f3a;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00d4ff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --border-color: #2d3250;
+            --code-bg: #0d1117;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #0f1429 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 50px,
+                    var(--accent-primary) 50px,
+                    var(--accent-primary) 51px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 50px,
+                    var(--accent-primary) 50px,
+                    var(--accent-primary) 51px
+                );
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 31, 58, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--accent-primary);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: glow 2s ease-in-out infinite alternate;
+            margin-bottom: 0.3rem;
+        }
+
+        .creator {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .creator-name {
+            color: var(--accent-primary);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px var(--accent-primary)); }
+            to { filter: drop-shadow(0 0 20px var(--accent-primary)); }
+        }
+
+        .nav-toggle {
+            display: none;
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            margin: 0.3rem 0;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar nav a:hover {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-primary);
+            border-left-color: var(--accent-primary);
+            transform: translateX(5px);
+        }
+
+        /* Main Content */
+        .main-content {
+            min-height: 100vh;
+        }
+
+        section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section:nth-child(2) { animation-delay: 0.1s; }
+        section:nth-child(3) { animation-delay: 0.2s; }
+        section:nth-child(4) { animation-delay: 0.3s; }
+        section:nth-child(5) { animation-delay: 0.4s; }
+
+        h2 {
+            color: var(--accent-primary);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--accent-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: var(--accent-secondary);
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+        }
+
+        h4 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Alert Box */
+        .alert {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid var(--warning);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
+        }
+
+        .alert::before {
+            content: '⚠️';
+            font-size: 1.5rem;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--accent-primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(0, 255, 136, 0.1);
+        }
+
+        pre::before {
+            content: '$ Terminal';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
+
+        code {
+            color: var(--accent-primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            display: block;
+            margin-top: 2rem;
+            line-height: 1.6;
+        }
+
+        .inline-code {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: var(--accent-primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            display: inline;
+            margin: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        /* Workflow Diagram */
+        .workflow {
+            background: var(--code-bg);
+            border: 2px solid var(--accent-secondary);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            color: var(--accent-secondary);
+            line-height: 1.8;
+        }
+
+        /* Tool Cards */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.2);
+        }
+
+        .tool-card h4 {
+            color: var(--accent-primary);
+            margin-top: 0;
+        }
+
+        /* Scenario Cards */
+        .scenario {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .scenario h4 {
+            color: var(--accent-secondary);
+            margin-top: 0;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                position: static;
+                display: none;
+                margin-bottom: 1rem;
+            }
+
+            .sidebar.active {
+                display: block;
+            }
+
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            .creator {
+                font-size: 0.75rem;
+            }
+
+            .nav-toggle {
+                display: block;
+                font-size: 1.2rem;
+                padding: 0.5rem 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+
+            code {
+                font-size: 0.8rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.6rem;
+            }
+
+            .scroll-top {
+                width: 40px;
+                height: 40px;
+                bottom: 1rem;
+                right: 1rem;
+                font-size: 1.2rem;
+            }
+
+            .workflow {
+                font-size: 0.7rem;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.1rem;
+            }
+
+            .creator {
+                font-size: 0.7rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            section {
+                padding: 1rem;
+            }
+
+            pre {
+                padding: 0.8rem;
+            }
+
+            table {
+                font-size: 0.75rem;
+            }
+
+            th, td {
+                padding: 0.4rem;
+            }
+
+            .tool-card {
+                padding: 1rem;
+            }
+
+            .scenario {
+                padding: 1rem;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Loading animation for code blocks */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .ascii-art {
+            color: var(--accent-primary);
+            font-family: monospace;
+            white-space: pre;
+            margin: 1rem 0;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>🔓 Password Cracking Guide</h1>
+                <p class="creator">Created by <span class="creator-name">AMMAR LAFIR</span></p>
+            </div>
+            <button class="nav-toggle" onclick="toggleSidebar()">☰ Menu</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <h3>📑 Navigation</h3>
+            <nav>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#phase1">Phase 1: Hash ID</a></li>
+                    <li><a href="#phase2">Phase 2: Wordlists</a></li>
+                    <li><a href="#phase3">Phase 3: Cracking</a></li>
+                    <li><a href="#phase4">Phase 4: Advanced</a></li>
+                    <li><a href="#workflows">Workflows</a></li>
+                    <li><a href="#reference">Quick Reference</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="overview">
+                <h2>🎓 Understanding the Big Picture</h2>
+                <p>Password cracking is like detective work: you start with scrambled data (hashes), use various tools to transform and analyze them, and eventually recover the original passwords.</p>
+                
+                <div class="workflow">┌─────────────────────────────────────────────────────────────────┐
+│                    REAL-WORLD WORKFLOW                           │
+├─────────────────────────────────────────────────────────────────┤
+│  1. OBTAIN → 2. CONVERT → 3. IDENTIFY → 4. GENERATE → 5. CRACK │
+│     Hashes      Format     Hash Type   Wordlists    Passwords   │
+│       ↓           ↓           ↓            ↓            ↓       │
+│    (Network   (Extract    (Name      (Wordlist    (Hashcat/   │
+│    sniffing,  hashes      That       Tools/AI)     John)       │
+│    breaches,  from files) Hash)                                  │
+│    dumps)                                                        │
+└─────────────────────────────────────────────────────────────────┘</div>
+
+                <div class="alert">
+                    <strong>Legal Notice:</strong> Only use these tools on systems you own or have explicit written permission to test. Unauthorized access to computer systems is illegal.
+                </div>
+            </section>
+
+            <section id="phase1">
+                <h2>🔍 Phase 1: Hash Identification & Conversion</h2>
+                
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <h4>1. Name That Hash</h4>
+                        <p>Identifies what type of hash you're looking at (MD5, SHA256, NTLM, etc.)</p>
+                        <pre><code># Install
+pip install name-that-hash
+
+# Identify a hash
+nth -t "5f4dcc3b5aa765d61d8327deb882cf99"
+# Output: MD5 (Most likely)</code></pre>
+                    </div>
+
+                    <div class="tool-card">
+                        <h4>2. Conversion Tools</h4>
+                        <p>Extract hashes from files so you can crack them.</p>
+                        <pre><code># ZIP files → hash
+zip2john secret.zip > hash.txt
+
+# PDF files → hash  
+pdf2john.pl doc.pdf > hash.txt
+
+# Keepass databases
+keepass2john db.kdbx > hash.txt</code></pre>
+                    </div>
+                </div>
+
+                <h3>Common Converters</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Purpose</th>
+                            <th>Command Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="inline-code">zip2john</span></td>
+                            <td>ZIP files → hash</td>
+                            <td><span class="inline-code">zip2john secret.zip > hash.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">pdf2john</span></td>
+                            <td>PDF files → hash</td>
+                            <td><span class="inline-code">pdf2john.pl doc.pdf > hash.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">keepass2john</span></td>
+                            <td>Keepass databases</td>
+                            <td><span class="inline-code">keepass2john db.kdbx > hash.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">7z2hashcat</span></td>
+                            <td>7-Zip archives</td>
+                            <td><span class="inline-code">7z2hashcat archive.7z > hash.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">itunes_backup2hashcat</span></td>
+                            <td>iTunes backups</td>
+                            <td><span class="inline-code">itunes_backup2hashcat Manifest.plist > hash.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">Rubeus-to-Hashcat</span></td>
+                            <td>Kerberoasting output</td>
+                            <td>Convert Rubeus output to Hashcat format</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="phase2">
+                <h2>📝 Phase 2: Wordlist Generation & Analysis</h2>
+                
+                <div class="tool-card">
+                    <h4>3. CeWL (Custom Word List Generator) 🕷️</h4>
+                    <p>Spider websites to create custom wordlists based on company-specific terms.</p>
+                    <pre><code># Basic usage - spider 2 levels deep
+cewl -d 2 -m 5 -w company.txt https://target.com
+
+# Advanced - include numbers and emails
+cewl -d 3 -m 4 --with-numbers --email -w target.txt https://example.com</code></pre>
+                    <p><strong>Real-world workflow:</strong></p>
+                    <ol>
+                        <li>Target is "Stark Industries"</li>
+                        <li>Run CeWL on starkindustries.com</li>
+                        <li>Gets words: "Stark", "Tony", "ArcReactor", "JARVIS", "Pepper"</li>
+                        <li>Use these as base words for password generation</li>
+                    </ol>
+                </div>
+
+                <div class="tool-card">
+                    <h4>4. CUPP (Common User Passwords Profiler) 👤</h4>
+                    <p>Generates wordlists based on personal information (birthdays, pets, family names).</p>
+                    <pre><code># Interactive mode
+python3 cupp.py -i
+
+# Example inputs:
+# First Name: Tony
+# Surname: Stark
+# Birthdate: 19700529
+# Partner: Pepper
+# Pet: Dummy
+# Company: Stark Industries</code></pre>
+                </div>
+
+                <div class="tool-card">
+                    <h4>5. PACK (Password Analysis and Cracking Kit) 📊</h4>
+                    <p>Analyzes existing password leaks to create masks and rules.</p>
+                    <pre><code># Analyze password patterns
+python3 statsgen.py passwords.txt -o masks.txt
+
+# Generate masks for Hashcat
+python3 maskgen.py masks.txt --target-time 3600 -o hashcat_masks.hcmask</code></pre>
+                </div>
+
+                <div class="tool-card">
+                    <h4>6. Mentalist 🧠</h4>
+                    <p>GUI tool for creating wordlists based on mental patterns people use.</p>
+                    <pre><code># Install and run
+git clone https://github.com/sc0tfree/mentalist.git
+cd mentalist
+python3 mentalist.py</code></pre>
+                    <p><strong>Workflow in GUI:</strong></p>
+                    <ol>
+                        <li>Base Words: Add "CompanyName", "ProjectX"</li>
+                        <li>Common Substitutions: Check "a→@", "s→$", "o→0"</li>
+                        <li>Append/Prepend: Add "2024!", "123"</li>
+                        <li>Output: Generate wordlist or Hashcat rules</li>
+                    </ol>
+                </div>
+
+                <h3>7. Other Wordlist Tools</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Purpose</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="inline-code">Crunch</span></td>
+                            <td>Generate all combinations</td>
+                            <td><span class="inline-code">crunch 8 8 abc123 -o wordlist.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">princeprocessor</span></td>
+                            <td>PRINCE algorithm</td>
+                            <td><span class="inline-code">pp64 < wordlist.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">maskprocessor</span></td>
+                            <td>High-performance generator</td>
+                            <td><span class="inline-code">mp64 ?u?l?l?d</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">duplicut</span></td>
+                            <td>Remove duplicates</td>
+                            <td><span class="inline-code">duplicut wordlist.txt -o clean.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">anew</span></td>
+                            <td>Append new lines only</td>
+                            <td><span class="inline-code">cat new.txt | anew old.txt</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="phase3">
+                <h2>⚡ Phase 3: Hashcat & John the Ripper</h2>
+                
+                <h3>8. Hashcat (The GPU Powerhouse)</h3>
+                <p>World's fastest password cracker using your graphics card.</p>
+                
+                <h4>Attack Modes</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mode</th>
+                            <th>Flag</th>
+                            <th>Description</th>
+                            <th>When to Use</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dictionary</td>
+                            <td><span class="inline-code">-a 0</span></td>
+                            <td>Tries every word in a list</td>
+                            <td>Fastest, try first</td>
+                        </tr>
+                        <tr>
+                            <td>Combination</td>
+                            <td><span class="inline-code">-a 1</span></td>
+                            <td>Combines two wordlists</td>
+                            <td>Passwords like "word1word2"</td>
+                        </tr>
+                        <tr>
+                            <td>Brute-force</td>
+                            <td><span class="inline-code">-a 3</span></td>
+                            <td>Tries every possible character</td>
+                            <td>Short passwords, last resort</td>
+                        </tr>
+                        <tr>
+                            <td>Hybrid</td>
+                            <td><span class="inline-code">-a 6</span></td>
+                            <td>Wordlist + mask appended</td>
+                            <td>"Password123" patterns</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Character Sets (Masks)</h4>
+                <ul>
+                    <li><span class="inline-code">?l</span> = lowercase (a-z)</li>
+                    <li><span class="inline-code">?u</span> = uppercase (A-Z)</li>
+                    <li><span class="inline-code">?d</span> = digits (0-9)</li>
+                    <li><span class="inline-code">?s</span> = special characters</li>
+                    <li><span class="inline-code">?a</span> = all of the above</li>
+                </ul>
+
+                <h4>Basic Examples</h4>
+                <pre><code># Simple dictionary attack (MD5)
+hashcat -m 0 -a 0 hash.txt rockyou.txt
+
+# Dictionary with rules
+hashcat -m 0 -a 0 hash.txt wordlist.txt -r best64.rule
+
+# Brute-force 8 characters
+hashcat -m 0 -a 3 hash.txt ?u?l?l?l?l?d?d?d
+
+# NTLM hash (Windows)
+hashcat -m 1000 -a 0 ntlm.txt rockyou.txt
+
+# WPA2 WiFi handshake
+hashcat -m 22000 -a 0 handshake.hc22000 rockyou.txt</code></pre>
+
+                <h3>9. John the Ripper (The Flexible Veteran)</h3>
+                <p>CPU-based cracker, excellent for many formats, easier for beginners.</p>
+                
+                <pre><code># Auto-detect and crack
+john hash.txt
+
+# Show cracked passwords
+john --show hash.txt
+
+# Specific format
+john --format=raw-md5 hash.txt
+
+# With wordlist
+john --wordlist=rockyou.txt hash.txt
+
+# With rules
+john --wordlist=words.txt --rules hash.txt</code></pre>
+
+                <h4>John vs Hashcat Decision Tree</h4>
+                <div class="workflow">Is it a standard hash (MD5, SHA, NTLM)?
+├── Yes → Do you have a good GPU?
+│   ├── Yes → Use Hashcat (much faster)
+│   └── No → Use John
+└── No (weird format, proprietary)
+    → Use John (supports more formats)</div>
+            </section>
+
+            <section id="phase4">
+                <h2>🤖 Phase 4: Advanced & AI Tools</h2>
+                
+                <div class="tool-card">
+                    <h4>10. PassGPT (Neural Network Cracking)</h4>
+                    <p>Uses AI to generate likely passwords based on learned patterns.</p>
+                    <pre><code># Generate passwords using trained model
+python passgpt.py --model passgpt_model --num_passwords 1000000 > ai_wordlist.txt
+
+# Use with Hashcat
+hashcat -m 0 -a 0 hash.txt ai_wordlist.txt</code></pre>
+                    <p><strong>When to use:</strong> Traditional wordlists fail, but you have training data from previous breaches of similar organizations.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h4>11. RulesFinder 🎯</h4>
+                    <p>Automatically discovers effective rules from cracked passwords.</p>
+                    <pre><code># Learn rules from known passwords
+python rulesfinder.py -d dictionary.txt -p cracked.txt -o discovered.rules
+
+# Use discovered rules
+hashcat -m 0 -a 0 hash.txt dictionary.txt -r discovered.rules</code></pre>
+                </div>
+
+                <h3>12. Distributed Cracking</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Purpose</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hashtopolis</td>
+                            <td>Multi-platform client-server</td>
+                            <td>Enterprise environments</td>
+                        </tr>
+                        <tr>
+                            <td>CrackLord</td>
+                            <td>Queue and resource system</td>
+                            <td>Managing multiple jobs</td>
+                        </tr>
+                        <tr>
+                            <td>fitcrack</td>
+                            <td>BOINC-based distributed system</td>
+                            <td>Academic/research environments</td>
+                        </tr>
+                        <tr>
+                            <td>NPK</td>
+                            <td>AWS serverless cracking</td>
+                            <td>Cloud-based cracking</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="workflows">
+                <h2>🔗 Complete Real-World Workflows</h2>
+                
+                <div class="scenario">
+                    <h4>Scenario 1: Penetration Test - Corporate Network</h4>
+                    <pre><code># STEP 1: Obtain hashes (using Mimikatz, Responder, etc.)
+
+# STEP 2: Identify hash type
+nth -t "aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0"
+# Result: NTLM
+
+# STEP 3: Create targeted wordlist
+cewl -d 2 -m 5 -w company.txt https://target-company.com
+cupp -i  # Add specific employee info
+
+# STEP 4: Expand with rules
+hashcat --stdout company.txt -r best64.rule > expanded.txt
+cat cupp_output.txt >> expanded.txt
+
+# STEP 5: Crack
+hashcat -m 1000 -a 0 ntlm_hashes.txt expanded.txt -o cracked.txt
+
+# STEP 6: Try masks based on company policy
+# (Policy: 12 chars, upper, lower, number, special)
+hashcat -m 1000 -a 3 ntlm_hashes.txt ?u?l?l?l?l?l?l?d?s?l?l?l</code></pre>
+                </div>
+
+                <div class="scenario">
+                    <h4>Scenario 2: CTF Challenge - Encrypted ZIP</h4>
+                    <pre><code># STEP 1: Extract hash from ZIP
+zip2john challenge.zip > zip_hash.txt
+
+# STEP 2: Check if John can handle it
+john --list=formats | grep zip
+
+# STEP 3: Try quick win with rockyou
+john --wordlist=rockyou.txt zip_hash.txt
+
+# STEP 4: GPU acceleration with Hashcat
+hashcat -m 17220 -a 0 zip_hash.txt rockyou.txt -r best64.rule
+
+# STEP 5: Brute force with masks
+hashcat -m 17220 -a 3 zip_hash.txt ?l?l?l?l?d?d?d?d</code></pre>
+                </div>
+
+                <div class="scenario">
+                    <h4>Scenario 3: Security Audit - Password Policy Testing</h4>
+                    <pre><code># STEP 1: Extract domain hashes
+secretsdump.py domain/admin:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c9b9a8baba89adaaf9f8e7ada6a4a8a0a7e7aaa6a4">[email&#160;protected]</a> > hashes.txt
+
+# STEP 2: Analyze with PACK for patterns
+python3 statsgen.py previously_cracked.txt -o masks.txt
+
+# STEP 3: Generate optimized masks
+python3 maskgen.py masks.txt --optindex -o audit_masks.hcmask
+
+# STEP 4: Run comprehensive audit
+# Round 1: Dictionary attack
+hashcat -m 1000 -a 0 hashes.txt rockyou.txt -o round1.txt
+
+# Round 2: Rules-based
+hashcat -m 1000 -a 0 hashes.txt rockyou.txt -r OneRuleToRuleThemAll.rule -o round2.txt
+
+# Round 3: Mask attack based on policy
+hashcat -m 1000 -a 3 hashes.txt audit_masks.hcmask -o round3.txt
+
+# Round 4: Combinator
+hashcat -m 1000 -a 1 hashes.txt names.txt years.txt -o round4.txt</code></pre>
+                </div>
+
+                <div class="scenario">
+                    <h4>Scenario 4: Wireless Security Assessment</h4>
+                    <pre><code># STEP 1: Capture handshake
+aircrack-ng -w /dev/null -b 00:11:22:33:44:55 capture.cap
+
+# STEP 2: Convert to Hashcat format
+hcxpcapngtool -o handshake.hc22000 -E wordlist capture.cap
+
+# STEP 3: Create location-specific wordlist
+cewl -d 1 -m 5 -w location.txt https://coffee-shop-target.com
+
+# STEP 4: Combine with common WiFi patterns
+echo "CoffeeShop" > base.txt
+echo "Guest" >> base.txt
+hashcat --stdout base.txt -r best64.rule > wifi_candidates.txt
+
+# STEP 5: Crack
+hashcat -m 22000 -a 0 handshake.hc22000 wifi_candidates.txt
+
+# STEP 6: Try common WiFi patterns
+hashcat -m 22000 -a 3 handshake.hc22000 ?u?l?l?l?l?l?l?d?d?d?d</code></pre>
+                </div>
+
+                <h3>🛠️ Tool Combinations & Pipelines</h3>
+                <div class="scenario">
+                    <h4>The "Kitchen Sink" Pipeline</h4>
+                    <p><strong>When you need to crack at any cost:</strong></p>
+                    <pre><code># 1. Generate massive custom list
+cewl -d 3 -m 4 https://target.com > cewl.txt
+cupp -i >> cupp.txt  # Interactive
+cat cewl.txt cupp.txt | sort -u > combined.txt
+
+# 2. Expand with rules
+hashcat --stdout combined.txt -r best64.rule -r toggles5.rule | sort -u > expanded.txt
+
+# 3. Add AI-generated passwords
+python passgpt.py --num 100000 >> expanded.txt
+
+# 4. Remove duplicates efficiently
+rling expanded.txt final_wordlist.txt
+
+# 5. Analyze and optimize
+pack/statsgen.py final_wordlist.txt -o masks.txt
+
+# 6. Crack with everything
+hashcat -m [mode] -a 0 hashes.txt final_wordlist.txt -o cracked.txt
+hashcat -m [mode] -a 3 hashes.txt masks.txt -o cracked.txt</code></pre>
+                </div>
+            </section>
+
+            <section id="reference">
+                <h2>📋 Quick Reference</h2>
+                
+                <h3>Tool Categories</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Tools</th>
+                            <th>Use When</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Identification</td>
+                            <td>Name That Hash, Hashes</td>
+                            <td>You don't know the hash type</td>
+                        </tr>
+                        <tr>
+                            <td>Conversion</td>
+                            <td>2john tools, 7z2hashcat</td>
+                            <td>Hash is embedded in a file</td>
+                        </tr>
+                        <tr>
+                            <td>Wordlist Gen</td>
+                            <td>CeWL, CUPP, Mentalist</td>
+                            <td>You need targeted words</td>
+                        </tr>
+                        <tr>
+                            <td>Wordlist Analysis</td>
+                            <td>PACK, Pipal, password-smelter</td>
+                            <td>You have password dumps to analyze</td>
+                        </tr>
+                        <tr>
+                            <td>Cracking (GPU)</td>
+                            <td>Hashcat</td>
+                            <td>Speed matters, standard hashes</td>
+                        </tr>
+                        <tr>
+                            <td>Cracking (CPU)</td>
+                            <td>John the Ripper</td>
+                            <td>Weird formats, no GPU available</td>
+                        </tr>
+                        <tr>
+                            <td>Distributed</td>
+                            <td>Hashtopolis, CrackLord</td>
+                            <td>Enterprise scale, many hashes</td>
+                        </tr>
+                        <tr>
+                            <td>AI/ML</td>
+                            <td>PassGPT, neural_network_cracking</td>
+                            <td>Traditional methods fail</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Common Hashcat Modes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mode</th>
+                            <th>Hash Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0</td><td>MD5</td></tr>
+                        <tr><td>100</td><td>SHA1</td></tr>
+                        <tr><td>1000</td><td>NTLM</td></tr>
+                        <tr><td>1800</td><td>SHA512crypt (Linux)</td></tr>
+                        <tr><td>3200</td><td>bcrypt</td></tr>
+                        <tr><td>5500</td><td>NetNTLMv1</td></tr>
+                        <tr><td>5600</td><td>NetNTLMv2</td></tr>
+                        <tr><td>13100</td><td>Kerberos 5 TGS-REP</td></tr>
+                        <tr><td>22000</td><td>WPA-PBKDF2-PMKID+EAPOL</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Essential Resources</h3>
+                <ul>
+                    <li><strong>Wordlists:</strong> RockYou, SecLists, WeakPass</li>
+                    <li><strong>Rules:</strong> Best64, OneRuleToRuleThemAll, NSA-Rules</li>
+                    <li><strong>Communities:</strong> Hashcat Forum, Hashmob, Hashkiller</li>
+                    <li><strong>Practice:</strong> TryHackMe, Hack The Box, CrackMe</li>
+                </ul>
+
+                <div class="alert">
+                    <strong>Remember:</strong> With great power comes great responsibility. Use these tools ethically and legally!
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer style="text-align: center; padding: 2rem; background: var(--bg-card); border-top: 2px solid var(--accent-primary); margin-top: 2rem;">
+        <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">🔓 Password Cracking Guide</p>
+        <p style="color: var(--accent-primary); font-weight: bold; font-size: 1.1rem; margin: 0;">Created by AMMAR LAFIR</p>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">For educational and authorized penetration testing purposes only</p>
+    </footer>
+
+    <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll to top button
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Syntax highlighting simulation
+        document.querySelectorAll('code').forEach(block => {
+            let html = block.innerHTML;
+            
+            // Comments
+            html = html.replace(/(#.*)/g, '<span style="color: #6b7280;">$1</span>');
+            
+            // Commands
+            html = html.replace(/\b(pip|git|python3|hashcat|john|cewl|cupp|nth|zip2john|pdf2john|keepass2john)\b/g, '<span style="color: #00ff88; font-weight: bold;">$1</span>');
+            
+            // Flags
+            html = html.replace(/(-[a-zA-Z]|-{1,2}[a-zA-Z-]+)/g, '<span style="color: #00d4ff;">$1</span>');
+            
+            // Strings
+            html = html.replace(/"([^"]*)"/g, '<span style="color: #fbbf24;">"$1"</span>');
+            
+            block.innerHTML = html;
+        });
+
+        // Add copy button to code blocks
+        document.querySelectorAll('pre').forEach(pre => {
+            const button = document.createElement('button');
+            button.innerHTML = '📋 Copy';
+            button.style.cssText = 'position: absolute; top: 5px; right: 10px; background: var(--accent-primary); color: var(--bg-primary); border: none; padding: 0.3rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;';
+            
+            button.addEventListener('click', () => {
+                const code = pre.querySelector('code');
+                const text = code.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    button.innerHTML = '✓ Copied!';
+                    setTimeout(() => {
+                        but
